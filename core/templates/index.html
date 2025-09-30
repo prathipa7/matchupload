@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title> 📊 Resume Analyser & Job Matcher</title>
+  <link rel="website icon" type="png" href="static/talent-search.png">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNm4zMWZxY2N3YTMxbDY0cmZvbWNoaG5rMnh1cHpkcDcwZ3c4bXp1OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZgTR3UQ9XAWDvqy9jv/giphy.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: #011a1a;
+      padding-top: 70px;
+    }
+
+    nav {
+      width: 100%;
+      background: linear-gradient(to bottom, #D4DFE6, #7fb0f5);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 70px;
+    }
+
+    nav ul li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: rgb(247, 49, 49);
+      font-weight: bold;
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: rgb(62, 96, 248);
+    }
+
+    nav ul li img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .container {
+      background: linear-gradient(to bottom, #D4DFE6, #C3D0E2);
+      max-width: 700px;
+      margin: 70px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .upload-box {
+      border: 2px dashed #007bff;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      background: #dd7f7f;
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    .upload-box.dragover {
+      background: #e6f0ff;
+      border-color: #0056b3;
+    }
+
+
+    button {
+      background: #FFA500;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      color: white;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: green;
+      transform: scale(1.02);
+    }
+
+
+    #fileName {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .job-card {
+      font-size: 18px;
+      color: #111;
+      line-height: 1.6;
+      background: #76a4fa;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.6s forwards;
+    }
+
+    .job-card strong {
+      font-size: 20px;
+      color: #0d0e0f;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+{% load static %}
+
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="{% url 'home' %}">
+          <img src="{% static 'home.png' %}" alt="Home Icon">
+          <span>
+            <h2>HOME</h2>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'about' %}">
+          <img src="{% static 'webpage.png' %}" alt="Team Icon">
+          <span>
+            <h2>MEET OUR TEAM</h2>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'userdata' %}">
+          <img src="{% static 'id-card.png' %}" alt="User Icon">
+          <span>
+            <h2>ABOUT YOU</h2>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <center style="color: black; display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <img src="{% static 'human-resources.png' %}" width="70px">
+      <b>
+        <h1>Connecting Resumes to Opportunities</h1>
+      </b>
+    </center>
+
+    <form id="resumeForm" enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+
+      <!-- Drag & Drop Upload -->
+      <div class="upload-box" id="dropBox">
+        <p>📂 Drag & Drop your Resume here or Choose from your files</p>
+        <input type="file" name="file" id="fileInput" hidden required>
+        <label for="fileInput" class="btn btn-primary">Choose File</label>
+        <p id="fileName">No file chosen</p>
+      </div>
+
+      <label>
+        <h2>Preferred Location (Optional):</h2>
+      </label>
+      <input type="text" name="location" placeholder="e.g. Chennai, Bangalore"><br><br>
+
+      <button type="submit"><b>🚀 ANALYSE & GRAB IT</b></button>
+    </form>
+
+    <h3>Results Await:</h3>
+    <pre id="result">
+      <img src="{% static 'star.png' %}" width="50px"> GET STARTED...MATCH YOUR GOAL </a></pre>
+  </div> {% if username %}
+  <!-- Toast Container -->
+  <div id="welcomeToast" style="
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    background-color: #5faceb;
+    color: rgb(12, 11, 11);
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    font-weight: bold;
+    display: none;
+    z-index: 10000;
+">
+    👋 WELCOME {{ username }}!!-TEAM TalentMatch
+  </div>
+
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    const csrftoken = getCookie("csrftoken");
+
+    // Show selected file name
+    document.getElementById("fileInput").addEventListener("change", function () {
+      document.getElementById("fileName").textContent = this.files[0] ? this.files[0].name : "No file chosen";
+    });
+
+    // Drag & Drop
+    const dropBox = document.getElementById("dropBox");
+    dropBox.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropBox.classList.add("dragover");
+    });
+    dropBox.addEventListener("dragleave", () => {
+      dropBox.classList.remove("dragover");
+    });
+    dropBox.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropBox.classList.remove("dragover");
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        document.getElementById("fileInput").files = e.dataTransfer.files;
+        document.getElementById("fileName").textContent = file.name;
+      }
+    });
+
+    // Handle form submit
+    document.getElementById("resumeForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const resultBox = document.getElementById("result");
+      resultBox.textContent = "⏳ Processing... Please Wait";
+
+      try {
+        const response = await fetch("/api/upload_resume/", {
+          method: "POST",
+          body: formData,
+          headers: { "X-CSRFToken": csrftoken }
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          resultBox.textContent = "❌ Server Error: " + errText;
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.matched_jobs || data.matched_jobs.length === 0) {
+          resultBox.innerHTML = "⚠️ No matching jobs found.";
+          return;
+        }
+
+        let html = "<h1>Matched Jobs:</h1>";
+        data.matched_jobs.forEach(job => {
+          html += `
+            <div class="job-card">
+              <strong>Role:</strong> ${job.title}<br>
+              <strong>Company:</strong> ${job.company}<br>
+              <strong>Location:</strong> ${job.location}<br>
+              <strong>Required Skills:</strong> ${job.required_skills.join(", ")}<br>
+              <strong>Match Score:</strong> ${job.score}%
+            </div>
+          `;
+        });
+        resultBox.innerHTML = html;
+
+      } catch (err) {
+        resultBox.textContent = "⚠️ Request failed: " + err.message;
+      }
+    });
+    const toast = document.getElementById("welcomeToast");
+    toast.style.display = "block";
+    toast.style.opacity = 1;
+
+    setTimeout(() => {
+      let fadeEffect = setInterval(() => {
+        if (!toast.style.opacity) toast.style.opacity = 1;
+        if (toast.style.opacity > 0) {
+          toast.style.opacity -= 0.05;
+        } else {
+          clearInterval(fadeEffect);
+          toast.style.display = "none";
+        }
+      }, 50);
+    }, 3000);
+
+  </script>
+  {% endif %}
+</body>
+</html>

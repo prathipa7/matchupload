@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>User Data</title>
+  <style>
+    body {
+      font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWd4NHloOGw0Ymp3cHBjeTl0YWpsc24wdjBtMnU3Y21uNTlid2Z5NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2ikwIgNrmPZICNmRyX/giphy.gif');
+    }
+
+    nav {
+      background: #333;
+      padding: 15px;
+      text-align: center;
+      gap:10px;
+    
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+      color: aqua;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background:linear-gradient(to bottom, #5ab0e6, #7e97bb) ;
+      padding: 30px;
+      border-radius: 8px;
+    }
+
+    input,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    button {
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="{% url 'home' %}">HOME</a>
+    <a href="{% url 'about' %}">MEET OUR TEAM</a>
+    <a href="{% url 'userdata' %}">ABOUT YOU</a>
+  </nav>
+
+  {% load static %}
+  <div class="container">
+    <h1 style="color:black; display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <img src="{% static 'login.png' %}" width="70px" alt="Login Icon">
+      ADD YOUR DETAILS 
+    </h1>
+
+    <!-- ✅ Moved form inside the container -->
+    <form>
+      <label><h3>YOUR NAME</h3></label>
+      <input type="text" placeholder="Full Name" required>
+
+      <label><h3>ANY ENQUIRY</h3></label>
+      <input type="text" placeholder="Message" required>
+
+      <button type="submit">SEND</button>
+    </form>
+  </div>
+</body>
+
+</html>
