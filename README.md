@@ -1,2 +1,0 @@
-# movies
-An entertainment hub
