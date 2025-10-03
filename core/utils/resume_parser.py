@@ -7,6 +7,10 @@ from PyPDF2 import PdfReader
 
 nlp = spacy.load("en_core_web_sm")
 
+def get_nlp():
+    import spacy
+    return spacy.load("en_core_web_sm")
+
 # Expanded skills dictionary (well-structured)
 BASE_SKILLS = {"Python","Django","Java","Maintaining records","UNIX","flask","fastapi","MYSQL","SQL","Eclipse","React.js","postgresql","mongodb","sqlite","Javascript","React","vue","angular","HTML","CSS","Kitchen Management - Expert","Recipe Development - Expert","Food Preparation - Expert","Customer Service - Expert","bootstrap","tailwind","professor","teacher","engineer","junior designer","graphic designer","Social Media","researcher","Food Safety - Expert","aws","azure","gcp","docker","kubernetes","GIT","GITHUB","gitlab","ci/cd","linux","bash","shell scripting","Adobe Photoshop","Adobe Indesign","illustrator","Google Suite","Microsoft Office Suite","WordPress","Teaching - Expert","Leadership - Expert","Research - Expert","Communication - Expert","Mentoring - Expert","software tech","Microsoft Word","tensorflow","pytorch","scikit-learn","pandas","numpy","nlp","data analysis","Machine learning","deep learning","excel","c programming","C++ programming","embedded systems","microcontrollers","circuit design","ic design","arduino","raspberry pi","Physics","Team work","curriculum development","education","research","PowerPoint","tally","accounting","Typewriting","Good communication","autocad","construction","site supervision","estimation","circuit design","maintenance","Automation","troubleshooting","premiere pro","after effects","storytelling","creativity","writing","editing","seo","research",}
 
