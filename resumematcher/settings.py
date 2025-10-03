@@ -21,16 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i^!*5_1o+xhgm^*#+h^i_bc5bwg%#v87saud9qf(sz$n8c&89#'
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-local-fallback-secret-key")
+
+# DEBUG: False in production, True locally
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+
+# ALLOWED_HOSTS: pull from env, fallback to localhost for local dev
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "talentmatchresume-kh0a.onrender.com",  # your Render domain
-]
 
 
 # Application definition
