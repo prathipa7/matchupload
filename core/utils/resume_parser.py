@@ -1,18 +1,44 @@
 from pdf2image import convert_from_path
 from PIL import Image
 import pytesseract
-import spacy
 import pdfplumber
 from PyPDF2 import PdfReader
 
-nlp = spacy.load("en_core_web_sm")
+# Singleton cache for spaCy model
+_nlp_model = None
 
 def get_nlp():
-    import spacy
-    return spacy.load("en_core_web_sm")
+    """Lazy-load spaCy model to save memory on server startup."""
+    global _nlp_model
+    if _nlp_model is None:
+        import spacy
+        _nlp_model = spacy.load("en_core_web_sm")
+    return _nlp_model
+
 
 # Expanded skills dictionary (well-structured)
-BASE_SKILLS = {"Python","Django","Java","Maintaining records","UNIX","flask","fastapi","MYSQL","SQL","Eclipse","React.js","postgresql","mongodb","sqlite","Javascript","React","vue","angular","HTML","CSS","Kitchen Management - Expert","Recipe Development - Expert","Food Preparation - Expert","Customer Service - Expert","bootstrap","tailwind","professor","teacher","engineer","junior designer","graphic designer","Social Media","researcher","Food Safety - Expert","aws","azure","gcp","docker","kubernetes","GIT","GITHUB","gitlab","ci/cd","linux","bash","shell scripting","Adobe Photoshop","Adobe Indesign","illustrator","Google Suite","Microsoft Office Suite","WordPress","Teaching - Expert","Leadership - Expert","Research - Expert","Communication - Expert","Mentoring - Expert","software tech","Microsoft Word","tensorflow","pytorch","scikit-learn","pandas","numpy","nlp","data analysis","Machine learning","deep learning","excel","c programming","C++ programming","embedded systems","microcontrollers","circuit design","ic design","arduino","raspberry pi","Physics","Team work","curriculum development","education","research","PowerPoint","tally","accounting","Typewriting","Good communication","autocad","construction","site supervision","estimation","circuit design","maintenance","Automation","troubleshooting","premiere pro","after effects","storytelling","creativity","writing","editing","seo","research",}
+BASE_SKILLS = {
+    "Python","Django","Java","Maintaining records","UNIX","flask","fastapi",
+    "MYSQL","SQL","Eclipse","React.js","postgresql","mongodb","sqlite",
+    "Javascript","React","vue","angular","HTML","CSS","Kitchen Management - Expert",
+    "Recipe Development - Expert","Food Preparation - Expert","Customer Service - Expert",
+    "bootstrap","tailwind","professor","teacher","engineer","junior designer",
+    "graphic designer","Social Media","researcher","Food Safety - Expert","aws",
+    "azure","gcp","docker","kubernetes","GIT","GITHUB","gitlab","ci/cd","linux",
+    "bash","shell scripting","Adobe Photoshop","Adobe Indesign","illustrator",
+    "Google Suite","Microsoft Office Suite","WordPress","Teaching - Expert",
+    "Leadership - Expert","Research - Expert","Communication - Expert","Mentoring - Expert",
+    "software tech","Microsoft Word","tensorflow","pytorch","scikit-learn","pandas",
+    "numpy","nlp","data analysis","Machine learning","deep learning","excel",
+    "c programming","C++ programming","embedded systems","microcontrollers",
+    "circuit design","ic design","arduino","raspberry pi","Physics","Team work",
+    "curriculum development","education","research","PowerPoint","tally","accounting",
+    "Typewriting","Good communication","autocad","construction","site supervision",
+    "estimation","circuit design","maintenance","Automation","troubleshooting",
+    "premiere pro","after effects","storytelling","creativity","writing","editing",
+    "seo","research",
+}
+
 
 def extract_text_from_pdf(file_path):
     """Extract text from PDF using pdfplumber first, then fallback to PyPDF2, then OCR."""
@@ -70,6 +96,7 @@ def normalize_text(s: str):
 def extract_skills(text: str):
     """Extract skills from resume text using dictionary + NLP frequency."""
     text = normalize_text(text)
+    nlp = get_nlp()  # Lazy-load spaCy here
     doc = nlp(text.lower())
 
     # Dictionary-based exact matches
