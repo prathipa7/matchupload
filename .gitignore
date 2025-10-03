@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Django static & media (Render)
+staticfiles/
+media/
+uploads/
+
+# Database (SQLite for local dev)
+*.sqlite3
+
+# Logs
+*.log
+
+# Model weights / large files (don’t push to GitHub)
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+models/
+weights/
