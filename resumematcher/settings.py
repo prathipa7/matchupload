@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "your-local-fallback-secret-key")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 # ALLOWED_HOSTS: pull from env, fallback to localhost for local dev
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost,resumematcher8.onrender.com").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'resumematcher.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',   # or 'django.db.backends.mysql'
-        'NAME': 'resumematcher',               # database name (you will create this)
-        'USER': 'root',                        # MySQL username
-        'PASSWORD':'Deepu@2003',                 # your MySQL password
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': os.environ.get('resumematcher'),               # database name (you will create this)
+        'USER':  os.environ.get('root'),                        # MySQL username
+        'PASSWORD': os.environ.get('Deepu@2003'),                 # your MySQL password
+        'HOST':  os.environ.get('localhost'),
+        'PORT': os.environ.get ('3306',5432),
     }
 }
 
@@ -127,7 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
